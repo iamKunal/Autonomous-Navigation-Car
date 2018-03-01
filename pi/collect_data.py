@@ -1,3 +1,5 @@
+#!/usr/bin/python2
+
 from __future__ import print_function
 import RPi.GPIO as GPIO
 import time
@@ -168,11 +170,14 @@ if __name__ == '__main__':
             frame_no-=1
         else:
             print(frame_no)
-            # cv2.imwrite(directory + str(time.time()-strt) + '_' + str(frame_no)+'_'+str(cont) + '.png', gray_frame)
+            filename = directory +  "%05d" % (frame_no) +'.'+str(cont) + '.png'
+            # filename = directory + str(time.time()-strt) + '_' + str(frame_no)+'_'+str(cont) + '.png'
+            # if cont==0:
+            cv2.imwrite(filename, gray_frame)
         cv2.arrowedLine(pygame_frame, arrw_src, arrw_dst, color=(255,0,0), thickness=2)#, line_type, shift, tipLength)
         display.blit(pygame.surfarray.make_surface(pygame_frame), (0,0))
         pygame.display.flip()
-        cv2.imshow("grey", gray_frame[100:200,])
+        cv2.imshow("grey", gray_frame[0:208,])
         cv2.waitKey(1)
         # print(frame_no)
         if cont is False:
