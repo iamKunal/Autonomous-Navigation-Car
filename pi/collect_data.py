@@ -11,7 +11,7 @@ from imutils.video.pivideostream import PiVideoStream
 
 channels = [3, 5, 7, 8]
 L_F, L_B, R_F, R_B = channels
-SIZE = (200, 200)
+SIZE = (200, 100)
 FPS = 60
 directory = 'data/'
 
@@ -146,13 +146,13 @@ if __name__ == '__main__':
     possible_keys = [pygame.K_UP, pygame.K_DOWN, pygame.K_RIGHT, pygame.K_LEFT]
 
     SIZE=SIZE[::-1]
-    frame_no =0
+    frame_no = 1
     strt = time.time()
     while True:
-        frame_no += 1
         cont = True
         original_frame = vs.read()
-        frame = cv2.flip(cv2.rotate(original_frame, cv2.ROTATE_90_CLOCKWISE), 0)
+        # frame = original_frame
+        frame = cv2.flip(cv2.rotate(original_frame, cv2.ROTATE_90_CLOCKWISE), 1)
         if frame is None:
             print("Camera Error")
             break
@@ -167,13 +167,13 @@ if __name__ == '__main__':
         cont = do_action(key_input)
         if cont is None or cont is False:
             stop()
-            frame_no-=1
         else:
             print(frame_no)
             filename = directory +  "%05d" % (frame_no) +'.'+str(cont) + '.png'
             # filename = directory + str(time.time()-strt) + '_' + str(frame_no)+'_'+str(cont) + '.png'
-            # if cont==0:
-            cv2.imwrite(filename, gray_frame)
+            if cont == 4:
+                cv2.imwrite(filename, gray_frame)
+                frame_no += 1
         cv2.arrowedLine(pygame_frame, arrw_src, arrw_dst, color=(255,0,0), thickness=2)#, line_type, shift, tipLength)
         display.blit(pygame.surfarray.make_surface(pygame_frame), (0,0))
         pygame.display.flip()

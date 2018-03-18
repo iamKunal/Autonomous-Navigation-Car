@@ -20,7 +20,7 @@ td = train_data[1:, :]
 tl = train_labels[1:, :]
 
 
-print tl
+# print tl
 
 assert td.shape[0] == tl.shape[0]
 
@@ -33,22 +33,22 @@ layer_sizes = np.int32([td.shape[1], 256, 32, tl.shape[1]])
 
 model = cv2.ml.ANN_MLP_create()
 model.setLayerSizes(layer_sizes)
-criteria = (cv2.TERM_CRITERIA_COUNT | cv2.TERM_CRITERIA_EPS, 2000, 1)
+criteria = (cv2.TERM_CRITERIA_COUNT | cv2.TERM_CRITERIA_EPS, 5, 0.0001)
 #criteria2 = (cv2.TERM_CRITERIA_COUNT, 100, 0.001)
 params = dict(term_crit = criteria,
                train_method = cv2.ml.ANN_MLP_BACKPROP,
-               bp_dw_scale = 0.001,
-               bp_moment_scale = 0.1 )
+               bp_dw_scale = 0.01,
+               bp_moment_scale = 0.001 )
 print 'Training MLP ...'
-# model.setTermCriteria(criteria)
+model.setTermCriteria(criteria)
 model.setTrainMethod(cv2.ml.ANN_MLP_BACKPROP)
 model.setBackpropWeightScale(0.01)
-model.setBackpropMomentumScale(0.5)
+model.setBackpropMomentumScale(0.1)
 
 num_iter = model.train(train, cv2.ml.ROW_SAMPLE, train_labels)
 
 
-#print 'Ran for %d iterations' % num_iter
+print 'Ran for %d iterations' % num_iter
 
 # train data
 ret_0, resp_0 = model.predict(train)
