@@ -29,21 +29,35 @@ train, test, train_labels, test_labels = train_test_split(td, tl, test_size=0.2)
 
 
 
-layer_sizes = np.int32([td.shape[1], 256, 32, tl.shape[1]])
+layer_sizes = np.int32([td.shape[1], 40, tl.shape[1]])
+
+# model = cv2.ml.ANN_MLP_create()
+# model.setLayerSizes(layer_sizes)
+# # # criteria = (cv2.TERM_CRITERIA_COUNT | cv2.TERM_CRITERIA_EPS, 5, 0.0001)
+# # criteria = (cv2.TERM_CRITERIA_EPS,1000, 0.01)
+# # model.setTrainMethod(cv2.ml.ANN_MLP_BACKPROP | cv2.ml.ANN_MLP_UPDATE_WEIGHTS)
+# # animals_net.setTermCriteria(( cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1 ))
+# # model.setTrainMethod(cv2.ml.ANN_MLP_BACKPROP)
+# # model.setBackpropWeightScale(0.0001)
+# # # model.setActivationFunction(cv2.ml.ANN_MLP_SIGMOID_SYM)
+
+# # model.setBackpropMomentumScale(0.1)
+
+
+# # model.setTrainMethod(cv2.ml.ANN_MLP_BACKPROP | cv2.ml.ANN_MLP_UPDATE_WEIGHTS)
+# # model.setActivationFunction(cv2.ml.ANN_MLP_SIGMOID_SYM)
+# # model.setTermCriteria(( cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1 ))
 
 model = cv2.ml.ANN_MLP_create()
 model.setLayerSizes(layer_sizes)
-criteria = (cv2.TERM_CRITERIA_COUNT | cv2.TERM_CRITERIA_EPS, 5, 0.0001)
-#criteria2 = (cv2.TERM_CRITERIA_COUNT, 100, 0.001)
-params = dict(term_crit = criteria,
-               train_method = cv2.ml.ANN_MLP_BACKPROP,
-               bp_dw_scale = 0.01,
-               bp_moment_scale = 0.001 )
-print 'Training MLP ...'
-model.setTermCriteria(criteria)
 model.setTrainMethod(cv2.ml.ANN_MLP_BACKPROP)
-model.setBackpropWeightScale(0.01)
 model.setBackpropMomentumScale(0.1)
+model.setBackpropWeightScale(0.001)
+model.setTermCriteria((cv2.TERM_CRITERIA_COUNT, 20, 0.1))
+model.setActivationFunction(cv2.ml.ANN_MLP_SIGMOID_SYM)
+
+
+print 'Training MLP ...'
 
 num_iter = model.train(train, cv2.ml.ROW_SAMPLE, train_labels)
 
